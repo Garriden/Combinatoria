@@ -1,22 +1,23 @@
-/******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <iostream>
-
+#include <cmath>
 using namespace std;
 
 // 1,2,4,8,16,32,64,128
 
-int binaryNum[12];
-int COLORES_SEGUIDOS = 6;
-int TOTAL_MONEY = 0;
+#define ITERATIONS false
 
-void decToBinary(int n)
+int binaryNum[12];
+bool PRINT_ALL_POSSIBILITIES = true;
+
+int MAX_INITIAL_MONEY = 512;
+int MAX_COLORES_SEGUIDOS = 8;
+
+int COLORES_SEGUIDOS = 5;
+int INITIAL_MONEY = 4;
+int TOTAL_MONEY = 0;
+int lastLost = 0;
+
+void DecToBinary(int n)
 {
     for(int kk = 0; kk < 12; ++kk) {
         binaryNum[kk]=0;
@@ -28,40 +29,66 @@ void decToBinary(int n)
         n = n / 2;
         ii++;
     }
- 
-    for (int j = COLORES_SEGUIDOS; j >= 0; j--) {
-        cout << binaryNum[j];
-    }
-    //cout << endl;
-}
-
-void martingala()
-{
-    int diaMoney = 0;
-    int moneyApostar = 1;
-    for(int ii = 0; ii <= COLORES_SEGUIDOS; ++ii) {
-        if(binaryNum[COLORES_SEGUIDOS-ii] == 0) { // red
-            diaMoney -= moneyApostar;
-            moneyApostar *= 2;
-        } else { // black
-           cout << " / " << moneyApostar*2 << endl;
-           TOTAL_MONEY += moneyApostar*2;
-           return; 
+    
+    if(PRINT_ALL_POSSIBILITIES) {
+        for (int j = COLORES_SEGUIDOS-1; j >= 0; j--) {
+            cout << binaryNum[j];
         }
     }
-    
-    cout << " / " << diaMoney << endl;
+}
+
+void Martingala()
+{
+    int dayMoneyLost = 0;
+    int moneyApostar = INITIAL_MONEY;
+    for(int ii = 0; ii <= COLORES_SEGUIDOS-1; ++ii) {
+        if(binaryNum[COLORES_SEGUIDOS-1-ii] == 0) { // red
+            dayMoneyLost -= moneyApostar;
+            moneyApostar *= 2;
+        } else { // black
+            if(PRINT_ALL_POSSIBILITIES) {
+                cout << " / " << (moneyApostar*2) + dayMoneyLost << endl;
+            }
+            TOTAL_MONEY += (moneyApostar*2) + dayMoneyLost;
+            return; 
+        }
+    }
+    if(PRINT_ALL_POSSIBILITIES) {
+        cout << " / " << dayMoneyLost << endl;
+    }
+    TOTAL_MONEY += dayMoneyLost;
+    lastLost = dayMoneyLost;
     
 }
 
 int main()
 {
-    for(int ii= 0; ii < 128; ++ii) {
-         decToBinary(ii);
-         martingala();
-    }
+#if ITERATIONS
+    cout << "APUESTAS, INITIAL_MONEY, TOTAL_MONEY, LAST_LOST ";
+    cout << endl;
     
-    cout << "TOTAL_MONEY: " << TOTAL_MONEY << endl;
-
+    COLORES_SEGUIDOS = 1; 
+    INITIAL_MONEY = 1;
+    
+    while(INITIAL_MONEY <= MAX_INITIAL_MONEY) {
+        while(COLORES_SEGUIDOS <= MAX_COLORES_SEGUIDOS) {
+#endif //ITERATIONS
+        
+            for(int ii= 0; ii < exp2(COLORES_SEGUIDOS); ++ii) {
+                 DecToBinary(ii);
+                 Martingala();
+            }
+     
+            cout << exp2(COLORES_SEGUIDOS) << "," << INITIAL_MONEY << "," << TOTAL_MONEY << "," << lastLost;
+            cout << endl;
+#if ITERATIONS               
+            TOTAL_MONEY = 0;
+            
+            COLORES_SEGUIDOS++;
+        }
+        COLORES_SEGUIDOS = 1;
+        INITIAL_MONEY *= 2;
+    }
+#endif //ITERATIONS
     return 0;
 }
