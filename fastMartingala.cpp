@@ -2,6 +2,8 @@
 #include <cmath>
 using namespace std;
 
+// APUESTAS, INITIAL_MONEY, TOTAL_MONEY, LAST_LOST 
+// 32,4,320,-124
 // 1,2,4,8,16,32,64,128
 
 #define ITERATIONS false
@@ -9,8 +11,8 @@ using namespace std;
 int binaryNum[12];
 bool PRINT_ALL_POSSIBILITIES = true;
 
-int MAX_INITIAL_MONEY = 512;
-int MAX_COLORES_SEGUIDOS = 8;
+int MAX_INITIAL_MONEY_IT = 512;
+int MAX_COLORES_SEGUIDOS_IT = 8;
 
 int COLORES_SEGUIDOS = 5;
 int INITIAL_MONEY = 4;
@@ -70,8 +72,8 @@ int main()
     COLORES_SEGUIDOS = 1; 
     INITIAL_MONEY = 1;
     
-    while(INITIAL_MONEY <= MAX_INITIAL_MONEY) {
-        while(COLORES_SEGUIDOS <= MAX_COLORES_SEGUIDOS) {
+    while(INITIAL_MONEY <= MAX_INITIAL_MONEY_IT) {
+        while(COLORES_SEGUIDOS <= MAX_COLORES_SEGUIDOS_IT) {
 #endif //ITERATIONS
         
             for(int ii= 0; ii < exp2(COLORES_SEGUIDOS); ++ii) {
