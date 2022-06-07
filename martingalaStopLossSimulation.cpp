@@ -10,10 +10,11 @@ using namespace std;
 int const INITIAL_SIMULATIONS = 1000;
 int const INITIAL_MONEY = 100;
 int const MINIMUM_BET = 4;
-int const IT_ = 50;
+int const IT_ = 80;
 
 int main() {
-
+    int minSimulationMoney = 100;
+    int maxSimulationMoney = -100;
     int simulationsMoney = 0;
     int simulations = INITIAL_SIMULATIONS;
     while(simulations --> 0) {
@@ -33,15 +34,23 @@ int main() {
             } else { // BLACK
                 //cout << "BLACK, LOST" << " . ";
                 moneyBet *= 2;
-                if(moneyBet >= 128) {
+                if(moneyBet >= (MINIMUM_BET*2*2*2*2*2)) {
                     moneyBet = 4;
                 }
             }
             //cout << "number: " << ruletNumber << " / nextBet: ";
             //cout << moneyBet << endl;
         }
-        cout << "Money won: " << totalMoney - INITIAL_MONEY << endl;
-        simulationsMoney += (totalMoney - INITIAL_MONEY);
+        int actualSimulationMoney = totalMoney - INITIAL_MONEY;
+        cout << "Money won: " << actualSimulationMoney << endl;
+        simulationsMoney += actualSimulationMoney;
+        if(actualSimulationMoney < minSimulationMoney) {
+            minSimulationMoney = actualSimulationMoney;
+        } else if(actualSimulationMoney > maxSimulationMoney) {
+            maxSimulationMoney = actualSimulationMoney;
+        }
     }
+    //cout << "Simulations TOTAL Money won: " << simulationsMoney << endl;
+    cout << "maxSimulationMoney: " << maxSimulationMoney << "  / minSimulationMoney: " << minSimulationMoney << endl;
     cout << "Simulations AVG Money won: " << simulationsMoney/INITIAL_SIMULATIONS << endl;
 }
