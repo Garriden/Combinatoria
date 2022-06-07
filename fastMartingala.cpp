@@ -41,26 +41,25 @@ void DecToBinary(int n)
 
 void Martingala()
 {
-    int dayMoneyLost = 0;
     int moneyApostar = INITIAL_MONEY;
+    int dayMoney = 0;
     for(int ii = 0; ii <= COLORES_SEGUIDOS-1; ++ii) {
-        if(binaryNum[COLORES_SEGUIDOS-1-ii] == 0) { // red
-            dayMoneyLost -= moneyApostar;
+        dayMoney -= moneyApostar; 
+        if(binaryNum[COLORES_SEGUIDOS-1-ii] == 0) { // black
             moneyApostar *= 2;
-        } else { // black
+        } else { // red
+            dayMoney += (moneyApostar*2);
             if(PRINT_ALL_POSSIBILITIES) {
-                cout << " / " << (moneyApostar*2) + dayMoneyLost << endl;
+                cout << " / " << dayMoney << endl;
             }
-            TOTAL_MONEY += (moneyApostar*2) + dayMoneyLost;
+            
             return; 
         }
     }
     if(PRINT_ALL_POSSIBILITIES) {
-        cout << " / " << dayMoneyLost << endl;
+        cout << " / " << dayMoney << endl;
     }
-    TOTAL_MONEY += dayMoneyLost;
-    lastLost = dayMoneyLost;
-    
+    TOTAL_MONEY = dayMoney;
 }
 
 int main()
