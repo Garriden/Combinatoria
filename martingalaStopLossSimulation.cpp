@@ -13,8 +13,8 @@ int const MINIMUM_BET = 4;
 int const IT_ = 80;
 
 int main() {
-    int minSimulationMoney = 100;
-    int maxSimulationMoney = -100;
+    int minSimulationMoney = 0;
+    int maxSimulationMoney = 0;
     int simulationsMoney = 0;
     int simulations = INITIAL_SIMULATIONS;
     while(simulations --> 0) {
@@ -25,9 +25,10 @@ int main() {
             totalMoney -= moneyBet;
         
             mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-            int ruletNumber = rng()%37;
+            //int ruletNumber = rng()%37;
+            int ruletNumber = (rng()/37)%2;
             
-            if(ruletNumber <= 18) {
+            if(ruletNumber == 1 /*> 18*/) {
                 //cout << "RED, WIN!" << "   . ";
                 totalMoney += moneyBet * 2;
                 moneyBet = 4;
@@ -38,11 +39,12 @@ int main() {
                     moneyBet = 4;
                 }
             }
-            //cout << "number: " << ruletNumber << " / nextBet: ";
-            //cout << moneyBet << endl;
+            //cout << "number: " << ruletNumber;
+            //cout << " / nextBet: " << moneyBet;
+            //cout << " / totalMoney: " << totalMoney << endl;
         }
         int actualSimulationMoney = totalMoney - INITIAL_MONEY;
-        cout << "Money won: " << actualSimulationMoney << endl;
+        //cout << "Money won: " << actualSimulationMoney << endl;
         simulationsMoney += actualSimulationMoney;
         if(actualSimulationMoney < minSimulationMoney) {
             minSimulationMoney = actualSimulationMoney;
